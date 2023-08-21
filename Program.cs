@@ -1,51 +1,61 @@
-﻿using AngouriMath;
-using ResistorSearch;
-using static AngouriMath.Entity.Set;
+﻿using ResistorSearch;
+
+
+while (true) {
+    Console.Clear();
+
+    Console.WriteLine(@"
+* Use ""r1"", ""r2"" and ""v"" in equality
+* Equality must have a ""="" sign
+* The left and right parts of equality can be swapped, it does not matter
+* The case does not matter
+
+* Examples of formulas
+*   For MT3608: v = 0.6 * (1 + (r1 / r2))
+*   For TPS61088: r1 = ((v - 1.204) * r2) / 1.204
+");
+
+    string formula = Utility.TryReadLine("Formula: ");
+
+    string voltage = Utility.TryReadLine("Out voltage: ").Replace(".", ",");
+
+    var eSeries = Utility.TryReadLine("E-series [3, 6, 12, 24, 48, 96, 192] (default 192): ");
+    var resistorValues = eSeries.Trim() switch {
+        "3" => ResistorValues.E3,
+        "6" => ResistorValues.E6,
+        "12" => ResistorValues.E12,
+        "24" => ResistorValues.E24,
+        "48" => ResistorValues.E48,
+        "96" => ResistorValues.E96,
+        "192" => ResistorValues.E192,
+        _ => ResistorValues.E192
+    };
+
+    var solver = new Solver() {
+        resistorValues = ResistorValues.GetRange(resistorValues)
+    };
 
 
 
+    Console.Clear();
+
+    Console.WriteLine("Search...");
+
+    var result = solver.SolveAll(formula, double.Parse(voltage));
+
+    Console.Clear();
 
 
-//Entity expr = "x = ((v - 1.204) * y) / 1.204";
+    int max = 200;
+    foreach (var item in result) {
+        Utility.WriteInfo(item);
+        if (--max < 0) {
+            break;
+        }
+    }
 
-
-//if (expr.Solve("v") is FiniteSet finiteSet) {
-//    var solutions = finiteSet.Elements.First();
-
-//    var f = solutions.Compile("x", "y");
-
-//    Console.WriteLine(f.Call(360, 56).Real);
-//}
-
-
-
-
-
-
-var values = ResistorValues.GetRange(ResistorValues.E24);
-//var formula = "0.6 * (1 + (r1 / r2)) = 12";
-var formula = "r1 = ((12 - 1.204) * r2) / 1.204";
-
-
-
-
-var solver = new Solver() { resistorValues = values };
-
-solver.Search(formula);
-
-
-
-//var result = Searcher.Search(values, formula, reference, maxResults);
-
-//foreach (var item in result) {
-
-//    var x = Math.Round(item.result, 2);
-//    var s = x.ToString("F" + "2".PadLeft(2, '0'));
-//    Console.WriteLine($"{s}   (R1 = {item.r1}; R2 = {item.r2})");
-//}
-
-
-
-Console.ReadKey();
-
+    Console.WriteLine("----------------------------------");
+    Console.WriteLine("Press any key to restart");
+    Console.ReadKey();
+}
 

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ResistorSearch;
 
-namespace ResistorSearch;
+
 public struct ResistorValues {
     static public List<double> E3 = new() { 
         1.0, 2.2, 4.7 
