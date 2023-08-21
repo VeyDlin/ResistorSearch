@@ -24,13 +24,10 @@ public class Solver {
 
 
     public List<Info> Search(string formula) {
-        formula = formula.Replace("r1", "x").Replace("r2", "y");
-
-
+        (var main, var equality) = NormalizeFormula(formula);
 
        
-
-
+        SolveAll(main);
 
         return new();
     }
@@ -68,18 +65,30 @@ public class Solver {
 
 
 
-    private string GetType(string side) {
-        side = side.Trim().ToLower();
+    private (string, string) NormalizeFormula(string formula) {
 
-        if (side == "x" || side == "y") {
-            return "xy";
+        bool IsMainPart(string side) {
+            if (side == "x" || side == "y" || double.TryParse(side, out double _)) {
+                return false;
+            }
+            return true;
         }
 
-        if (double.TryParse(side, out double _)) {
-            return "int";
+        formula = formula.ToLower().Replace("r1", "x").Replace("r2", "y");
+
+        var sides = formula.Split('=').Select(c => c.Trim()).ToArray();
+        bool[] types = { IsMainPart(sides[0]), IsMainPart(sides[1]) };
+
+        // Check
+        if (types.Count(c => c) != 1) {
+            throw new Exception("Incorrect formula");
         }
 
-        return "unknown";
+        if (types[0]) {
+            return (sides[0], sides[1]);
+        } else {
+            return (sides[1], sides[0]);
+        }
     }
 
 

@@ -22,16 +22,16 @@ using static AngouriMath.Entity.Set;
 
 
 
-//var values = ResistorValues.GetRange(ResistorValues.E96);
-////var formula = "0.6 * (1 + (r1 / r2)) = 12";
-//var formula = "r1 = ((12 - 1.204) * r2) / 1.204";
+var values = ResistorValues.GetRange(ResistorValues.E24);
+//var formula = "0.6 * (1 + (r1 / r2)) = 12";
+var formula = "r1 = ((12 - 1.204) * r2) / 1.204";
 
 
 
 
-//var solver = new Solver() { resistorValues = values };
+var solver = new Solver() { resistorValues = values };
 
-//solver.Search(formula);
+solver.Search(formula);
 
 
 
