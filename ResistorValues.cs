@@ -60,12 +60,16 @@ public struct ResistorValues {
 
 
 
-    static public List<double> GetRange(List<double> values) {
+    static public List<double> GetRange(List<double> values, int min = 1000, int max = 1000000) {
         List<double> range = new();
 
         for (int i = 0; i < values.Count; i++) {
             for (double j = 0; j <= 6; j++) {
-                range.Add(values[i] * Math.Pow(10, j));
+                var ohm = values[i] * Math.Pow(10, j);
+
+                if (ohm >= min && ohm <= max) {
+                    range.Add(ohm);
+                }
             }
         }
 
