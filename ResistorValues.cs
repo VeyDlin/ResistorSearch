@@ -66,6 +66,7 @@ public struct ResistorValues {
         for (int i = 0; i < values.Count; i++) {
             for (double j = 0; j <= 6; j++) {
                 var ohm = values[i] * Math.Pow(10, j);
+                ohm = Math.Round(ohm, 2);
 
                 if (ohm >= min && ohm <= max) {
                     range.Add(ohm);
