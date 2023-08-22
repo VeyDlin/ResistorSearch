@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="AngouriMath" Version="1.3.0" />
+    <PackageReference Include="ConsoleTables" Version="2.5.0" />
   </ItemGroup>
 
 </Project>

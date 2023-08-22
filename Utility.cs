@@ -1,4 +1,5 @@
-﻿using static ResistorSearch.Solver;
+﻿using ConsoleTables;
+using static ResistorSearch.Solver;
 
 namespace ResistorSearch;
 
@@ -19,12 +20,22 @@ public class Utility {
 
 
 
-    static public void WriteInfo(Solver.Info info) {
-        var x = FormatResistance(info.x);
-        var y = FormatResistance(info.y);
-        var v = info.v.ToString("F" + "2".PadLeft(2, '0'));
+    static public void WriteInfo(List<Info> infoList, int max = 200) {
+        var table = new ConsoleTable("Vout", "R1", "R2");
 
-        Console.WriteLine($"{v}   (R1 = {x}; R2 = {y})");
+        foreach (var info in infoList) {
+            table.AddRow(
+                info.v.ToString("F" + "2".PadLeft(2, '0')).Replace(",", "."), 
+                FormatResistance(info.x), 
+                FormatResistance(info.y)
+            );
+
+            if (--max <= 0) {
+                break;
+            }
+        }
+
+        table.Write(Format.Minimal);
     }
 
 
@@ -32,12 +43,16 @@ public class Utility {
 
 
     static public string FormatResistance(double ohms) {
+        string res;
+
         if (ohms >= 1000.0) {
-            return $"{Math.Round(ohms / 1000.0, 2)}k";
+            res = $"{Math.Round(ohms / 1000.0, 2)}k";
+        } else if (ohms >= 100000.0) {
+            res = $"{Math.Round(ohms / 100000.0, 2)}M";
+        } else {
+            res = $"{Math.Round(ohms, 2)}";
         }
-        if (ohms >= 100000.0) {
-            return $"{Math.Round(ohms / 100000.0, 2)}M";
-        }
-        return $"{Math.Round(ohms, 2)}";
+
+        return res.Replace(",", ".");
     }
 }
