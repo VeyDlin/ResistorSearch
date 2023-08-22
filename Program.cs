@@ -1,5 +1,12 @@
 ﻿using ResistorSearch;
-using System.IO;
+
+
+const int minOhm = 1000;
+const int maxOhm = 1000000;
+const int maxResults = 200;
+
+
+
 
 
 while (true) {
@@ -31,7 +38,7 @@ while (true) {
         };
 
         var solver = new Solver() {
-            resistorValues = ResistorValues.GetRange(resistorValues)
+            resistorValues = ResistorValues.GetRange(resistorValues, minOhm, maxOhm)
         };
 
 
@@ -43,7 +50,7 @@ while (true) {
 
         Console.Clear();
 
-        Utility.WriteInfo(result, 200);
+        Utility.WriteInfo(result, maxResults);
 
     } catch (Exception ex) {
         Console.Clear();
@@ -51,7 +58,6 @@ while (true) {
     }
 
 
-    Console.WriteLine();
     Console.WriteLine("----------------------------------");
     Console.WriteLine("Press any key to restart");
 
@@ -59,4 +65,3 @@ while (true) {
 
     Console.Clear();
 }
-
